@@ -7,7 +7,7 @@
 //! on-request `render` — to the shared [`test_cabinet_model_skin::cli::run`]. There is
 //! **no `--part` flag**: a skinned character is one field with one log. The Surface
 //! Nets / Dual Contouring siblings are `sn-skin` / `dc-skin`. See
-//! `apps/docs/src/content/docs/testing/asset-generation/skinned-binaries.md`.
+//! <https://docs.testcabinet.ai/testing/asset-generation/skinned-binaries/>.
 
 use std::process::ExitCode;
 

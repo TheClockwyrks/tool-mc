@@ -1,0 +1,7 @@
+# The kit this repository was rendered from, written by the superrepo's
+# scripts/repos/render.py from the answers in .copier-answers.yml. `name`
+# decides the dependency edges the dependency-edges gate permits, and `kind`
+# the shape the kit gave the repository.
+name = "tool-mc"
+kind = "tool"
+description = "The marching-cubes tool: the mc, mc-anim and mc-skin binaries a run image carries to mesh, rig, animate and skin marching-cubes models."

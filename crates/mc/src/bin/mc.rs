@@ -12,7 +12,7 @@
 //! single source of truth. The operation subcommands' `--help` is the contract; no
 //! operations schema is seeded.
 //!
-//! See `apps/docs/src/content/docs/testing/asset-generation/`.
+//! See <https://docs.testcabinet.ai/testing/asset-generation/mesh-binaries/>.
 
 use std::path::PathBuf;
 use std::process::ExitCode;

@@ -1,6 +1,6 @@
 //! The marching-cubes meshing tool for 3D asset-generation test cases.
 //!
-//! See `apps/docs/src/content/docs/testing/asset-generation/`. The model builds a
+//! See <https://docs.testcabinet.ai/testing/asset-generation/mesh-binaries/>. The model builds a
 //! model by compositing CSG primitives into a signed-distance
 //! [`Field`](test_cabinet_voxel_mesh::Field) through the `mc` (static) or `mc-anim`
 //! (rigged) binary, one recorded [`FieldOp`](test_cabinet_voxel_mesh::FieldOp) at a
@@ -12,7 +12,7 @@
 //! The signed-distance domain — the field, the shared op vocabulary, and the mesher —
 //! lives in `test-cabinet-voxel-mesh`; the generic record/preview plumbing and the
 //! mesh renderer live in `test-cabinet-model-core`. This crate is the thin CLI that
-//! wires them together, mirroring the cube tool's `crates/voxel`.
+//! wires them together, mirroring the cube tool's voxel crate in tool-voxel.
 
 #[cfg(feature = "cli")]
 pub mod cli;

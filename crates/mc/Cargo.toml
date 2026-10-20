@@ -1,8 +1,10 @@
 [package]
 name = "test-cabinet-mc"
+description = "The marching-cubes field domain and the mc binary a run image carries to mesh a static model."
 edition.workspace = true
 version.workspace = true
 license.workspace = true
+repository.workspace = true
 publish.workspace = true
 
 # The `mc` binary and its library: the **marching-cubes** meshing tool for static 3D

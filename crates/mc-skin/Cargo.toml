@@ -1,8 +1,10 @@
 [package]
 name = "test-cabinet-mc-skin"
+description = "The mc-skin binary a run image carries to build a skinned marching-cubes character."
 edition.workspace = true
 version.workspace = true
 license.workspace = true
+repository.workspace = true
 publish.workspace = true
 
 # The `mc-skin` binary: the Marching Cubes skinned-character tool (low-poly surface
@@ -10,7 +12,7 @@ publish.workspace = true
 # surface to `test-cabinet-model-skin` (the shared skinning CLI — the skeleton binding,
 # skin weighting, and skinned-`.glb` encode). The Surface Nets / Dual Contouring
 # siblings are `sn-skin` / `dc-skin`. See
-# `apps/docs/src/content/docs/testing/asset-generation/skinned-binaries.md`.
+# <https://docs.testcabinet.ai/testing/asset-generation/skinned-binaries/>.
 [[bin]]
 name = "mc-skin"
 path = "src/main.rs"

@@ -1,8 +1,10 @@
 [package]
 name = "test-cabinet-mc-anim"
+description = "The mc-anim binary a run image carries to mesh, rig and animate a marching-cubes model."
 edition.workspace = true
 version.workspace = true
 license.workspace = true
+repository.workspace = true
 publish.workspace = true
 
 # The `mc-anim` binary: the marching-cubes meshing tool for rigged, animated 3D

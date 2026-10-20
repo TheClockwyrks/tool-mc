@@ -20,7 +20,7 @@
 //! at a `--time` of one of its animations. `render` is where each part's extracted
 //! `.glb` (the geometry the 3D client renders) is emitted.
 //!
-//! See `apps/docs/src/content/docs/testing/asset-generation/`.
+//! See <https://docs.testcabinet.ai/testing/asset-generation/mesh-binaries/>.
 
 use std::path::PathBuf;
 use std::process::ExitCode;

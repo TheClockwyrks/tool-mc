@@ -1,0 +1,6 @@
+crates/mc/
+crates/mc-anim/
+crates/mc-skin/
+crates/voxel-anim/src/main.rs
+crates/voxel/src/bin/voxel-anim.rs
+crates/voxel/src/bin/voxel.rs

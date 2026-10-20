@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile:1
+# The image carrying the binaries of tool-mc. Its pipeline builds it on
+# every gated push to master and staging, natively once per architecture
+# (scripts/ci/image.sh), and fuses the two into the multi-arch
+# `testcabinet.azurecr.io/tool-mc:<commit>` (scripts/ci/manifest.sh).
+# The driver's run-container images copy the binaries, `mc`, `mc-anim` and
+# `mc-skin` (/usr/local/bin/mc, /usr/local/bin/mc-anim,
+# /usr/local/bin/mc-skin), from it at the commit the driver pins; the image
+# runs nothing itself.
+#
+# The build context is the repository root, held to what .dockerignore admits,
+# and the `build-context` gate holds every COPY below to that allowlist and the
+# Rust pin to rust-toolchain.toml's channel. The kit writes this file once, as
+# a scaffold, and it then belongs to the repository: an update never merges
+# into it.
+#
+# A manifest names a dependency on another repository by its public source,
+# which a build cannot reach while the mirrors are private. The pipeline hands
+# the build the git configuration scripts/ci/git-sources.sh wrote, which
+# rewrites each public source to Azure and carries the job's token, as the
+# secret `gitconfig`; it is mounted for the one RUN that fetches and never
+# enters a layer. A build without it fetches from the public sources as named.
+FROM docker.io/library/rust:1.97.1-bookworm AS build
+WORKDIR /src
+COPY . .
+# The commit the image is built from, which the build context, carrying no
+# `.git`, cannot tell; the pipeline passes it.
+ARG TCAB_BUILD_COMMIT
+# The cargo registry, the git checkouts and target/ are cache mounts, so a
+# source change compiles only what changed. BuildKit replays the mtimes a file
+# had in the context when the COPY is served from cache, so the sources are
+# touched first and cargo never takes an artifact of another build as fresh.
+#
+# A tool commits no lock file, so the build resolves its dependencies as
+# cargo finds them, as the tool's pipeline does. Every binary target of the
+# three crates is built (`--bins`), and the binaries carried are the
+# executables cargo reports building, so a binary a crate adds is carried
+# without an edit here, and one it drops is not left behind by the cached
+# target/. A build yielding no binary has nothing for a run image to copy, and
+# fails saying so.
+RUN --mount=type=secret,id=gitconfig,target=/root/.gitconfig,required=false \
+    --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    --mount=type=cache,target=/src/target \
+    find /src -path /src/target -prune -o -type f -exec touch {} + \
+    && TCAB_BUILD_COMMIT="${TCAB_BUILD_COMMIT}" cargo build --release --bins -p test-cabinet-mc -p test-cabinet-mc-anim -p test-cabinet-mc-skin \
+        --message-format=json-render-diagnostics >/tmp/build.json \
+    && mkdir -p /out/bin \
+    && grep -o '"executable":"[^"]*"' /tmp/build.json | sed 's/^"executable":"//; s/"$//' >/tmp/binaries \
+    && if [ ! -s /tmp/binaries ]; then echo "test-cabinet-mc, test-cabinet-mc-anim and test-cabinet-mc-skin build no binary, so the image would carry none" >&2; exit 1; fi \
+    && xargs -r cp -t /out/bin/ </tmp/binaries \
+    && ls -l /out/bin/
+
+FROM docker.io/library/debian:bookworm-slim
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+COPY --from=build /out/bin/ /usr/local/bin/
